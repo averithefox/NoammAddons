@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinOdinTelemetry {
     @Dynamic
     @Inject(method = "invokeSuspend", at = @At(value = "HEAD"), cancellable = true, require = 0)
-    private void stopTelemetry(Object result, CallbackInfoReturnable ci) {
+    private void stopTelemetry(Object result, CallbackInfoReturnable<?> ci) {
         NoammAddons.logger.info("Blocked Odin Telemetry");
         ci.cancel();
     }

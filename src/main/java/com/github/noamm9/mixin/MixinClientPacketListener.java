@@ -23,7 +23,7 @@ public class MixinClientPacketListener {
             target = "Lnet/minecraft/network/protocol/Packet;handle(Lnet/minecraft/network/PacketListener;)V"
         )
     )
-    private void wrapPacketHandle(Packet packet, PacketListener listener, Operation<Void> original) {
+    private void wrapPacketHandle(Packet<?> packet, PacketListener listener, Operation<Void> original) {
         if (EventBus.post(new MainThreadPacketReceivedEvent.Pre(packet))) return;
         original.call(packet, listener);
         EventBus.post(new MainThreadPacketReceivedEvent.Post(packet));

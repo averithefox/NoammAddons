@@ -30,11 +30,14 @@ public abstract class MixinLivingEntity extends Entity {
     @Shadow
     public abstract @Nullable MobEffectInstance getEffect(Holder<MobEffect> holder);
 
+    @Shadow
+    public abstract ItemStack getMainHandItem();
+
     @Inject(method = "getCurrentSwingDuration", at = @At("HEAD"), cancellable = true)
     private void adjustSwingLength(CallbackInfoReturnable<Integer> cir) {
         if (!Animations.INSTANCE.enabled) return;
         if (!this.is(NoammAddons.mc.player)) return;
-        if (NoammAddons.mc.player.getMainHandItem() == ItemStack.EMPTY) return;
+        if (getMainHandItem() == ItemStack.EMPTY) return;
 
         int length;
 
