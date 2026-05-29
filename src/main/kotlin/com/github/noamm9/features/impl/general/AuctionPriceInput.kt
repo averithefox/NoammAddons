@@ -3,7 +3,6 @@ package com.github.noamm9.features.impl.general
 import com.github.noamm9.NoammAddons
 import com.github.noamm9.event.impl.ContainerEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.IAbstractSignEditScreen
 import com.github.noamm9.ui.clickgui.components.impl.DropdownSetting
 import com.github.noamm9.ui.clickgui.components.impl.MultiCheckboxSetting
 import com.github.noamm9.ui.utils.componnents.UIButton
@@ -48,7 +47,7 @@ object AuctionPriceInput: Feature("Replaces the sign input with a proper textbox
             if (! enabled) return@register
             if (screen !is AbstractSignEditScreen) return@register
             val stack = item ?: return@register
-            val sign = (screen as IAbstractSignEditScreen).getSign() ?: return@register
+            val sign = screen.sign ?: return@register
             val lines = Array(4) { i -> sign.frontText.getMessage(i, false).string }
 
             if (lines[1] == "^^^^^^^^^^^^^^^" && lines[2] == "Your auction" && lines[3] == "starting bid") mc.execute {

@@ -1,7 +1,6 @@
 package com.github.noamm9.utils.items
 
 import com.github.noamm9.NoammAddons
-import com.github.noamm9.mixin.ILocalPlayer
 import com.github.noamm9.utils.MathUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
@@ -19,7 +18,7 @@ object InstantTransmissionHelper {
     fun predictTeleport(distance: Double, startPos: Vec3, yaw: Float, pitch: Float): Vec3? {
         val player = NoammAddons.mc.player ?: return null
 
-        val eyeHeight = EYE_HEIGHT - if ((player as ILocalPlayer).isSneakingServer) SNEAK_OFFSET else .0
+        val eyeHeight = EYE_HEIGHT - if (player.isCrouching) SNEAK_OFFSET else .0
         var currentPosition = Vec3(startPos.x, startPos.y + eyeHeight, startPos.z)
 
         val direction = MathUtils.getLookVec(yaw, pitch)

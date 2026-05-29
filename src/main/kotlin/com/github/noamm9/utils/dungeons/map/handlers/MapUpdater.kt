@@ -1,6 +1,5 @@
 package com.github.noamm9.utils.dungeons.map.handlers
 
-import com.github.noamm9.mixin.IMapState
 import com.github.noamm9.utils.MathUtils
 import com.github.noamm9.utils.WorldUtils
 import com.github.noamm9.utils.dungeons.DungeonListener
@@ -23,7 +22,7 @@ object MapUpdater {
     val playerJobs = ConcurrentHashMap<String, Job>()
 
     fun updatePlayers() {
-        val mapData = DungeonInfo.mapData as? IMapState ?: return
+        val mapData = DungeonInfo.mapData ?: return
         val decorations = mapData.decorations ?: return
         val livingTeammates = dungeonTeammatesNoSelf.filter { ! it.isDead }
 

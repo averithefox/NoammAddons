@@ -1,7 +1,6 @@
 package com.github.noamm9.utils
 
 import com.github.noamm9.NoammAddons.mc
-import com.github.noamm9.mixin.IAbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.inventory.ClickType
 
@@ -22,7 +21,6 @@ object GuiUtils {
 
     fun getSlotPos(screen: AbstractContainerScreen<*>, index: Int): Pair<Float, Float>? {
         val slot = screen.menu.slots.getOrNull(index) ?: return null
-        val screenBase = screen as IAbstractContainerScreen
-        return (screenBase.leftPos + slot.x).toFloat() to (screenBase.topPos + slot.y).toFloat()
+        return (screen.leftPos + slot.x).toFloat() to (screen.topPos + slot.y).toFloat()
     }
 }

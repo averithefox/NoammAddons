@@ -4,7 +4,6 @@ import com.github.noamm9.event.impl.ContainerEvent
 import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.event.impl.PacketEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.IKeyMapping
 import com.github.noamm9.ui.clickgui.components.impl.KeybindSetting
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
 import com.github.noamm9.utils.ChatUtils.unformattedText
@@ -28,7 +27,7 @@ object WardrobeKeybinds: Feature("Make it possible to bind armor slots to your k
     )
 
     private val hotbarKeyMap by lazy {
-        mc.options.keyHotbarSlots.withIndex().associate { (i, key) -> (key as IKeyMapping).key.value to i }
+        mc.options.keyHotbarSlots.withIndex().associate { (i, key) -> key.key.value to i }
     }
 
     private val closeAfterUse by ToggleSetting("Auto Close On Use")

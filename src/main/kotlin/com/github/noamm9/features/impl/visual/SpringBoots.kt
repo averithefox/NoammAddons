@@ -4,7 +4,6 @@ import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.event.impl.RenderWorldEvent
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.ILocalPlayer
 import com.github.noamm9.ui.clickgui.components.impl.ColorSetting
 import com.github.noamm9.ui.clickgui.components.impl.DropdownSetting
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
@@ -100,8 +99,8 @@ object SpringBoots: Feature("Shows the spring boots charge progress on screen.")
         register<TickEvent.End> {
             if (! LocationUtils.inSkyblock) return@register
             if (currentHeight <= 0) return@register
-            val player = mc.player as? ILocalPlayer ?: return@register
-            if (! player.isSneakingServer || ! player.onGroundServer()) reset()
+            val player = mc.player ?: return@register
+            if (! player.isCrouching || ! player.lastOnGround) reset()
         }
 
         register<RenderWorldEvent> {

@@ -57,7 +57,7 @@ dependencies {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/noammaddons.accesswidener")
+    accessWidenerPath = file("src/main/resources/noammaddons.classTweaker")
 
     runConfigs.named("client") {
         isIdeConfigGenerated = true

@@ -1,7 +1,6 @@
 package com.github.noamm9.features.impl.dungeon
 
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.ILerpingBossEvent
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
 import com.github.noamm9.utils.ChatUtils.unformattedText
 import com.github.noamm9.utils.location.LocationUtils
@@ -23,8 +22,7 @@ object BossBarHealth: Feature(name = "Bossbar Health", description = "Shows the 
         if (! LocationUtils.inDungeon) return originalName
         val maxHealth = getMaxHealth(originalName) ?: return originalName
 
-        val percent = (instance as ILerpingBossEvent).getTargetPrecent()
-        val currentHealth = (percent * maxHealth).roundToInt().toFloat()
+        val currentHealth = (instance.targetPercent * maxHealth).roundToInt().toFloat()
 
         return originalName.copy().append(
             Component.literal(" §r§8- §a" + formatHealth(currentHealth) + "§7/§a" + formatHealth(maxHealth) + "§c❤")

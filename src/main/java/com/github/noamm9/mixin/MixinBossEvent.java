@@ -19,7 +19,7 @@ public class MixinBossEvent {
     @Inject(method = "setName", at = @At("HEAD"))
     private void onSetName(Component name, CallbackInfo ci) {
         if ((Object) this instanceof LerpingBossEvent self) {
-            EventBus.post(new BossBarUpdateEvent(name, ((ILerpingBossEvent) self).getTargetPrecent()));
+            EventBus.post(new BossBarUpdateEvent(name, self.targetPercent));
         }
     }
 }

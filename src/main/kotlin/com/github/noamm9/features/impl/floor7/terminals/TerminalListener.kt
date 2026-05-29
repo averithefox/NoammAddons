@@ -6,7 +6,6 @@ import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.event.impl.PacketEvent
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.event.impl.WorldChangeEvent
-import com.github.noamm9.mixin.IServerboundInteractPacket
 import com.github.noamm9.utils.ChatUtils.unformattedText
 import com.github.noamm9.utils.ThreadUtils
 import com.github.noamm9.utils.dungeons.DungeonListener
@@ -102,7 +101,7 @@ object TerminalListener {
             is ServerboundContainerClosePacket -> if (inTerm) reset()
 
             is ServerboundInteractPacket -> {
-                val entity = mc.level?.getEntity((packet as IServerboundInteractPacket).entityId) as? ArmorStand ?: return
+                val entity = mc.level?.getEntity(packet.entityId) as? ArmorStand ?: return
                 if (entity.displayName?.unformattedText != "Inactive Terminal") return
 
                 if (interactCooldown > 0 || lastWindowId != - 1) event.isCanceled = true else interactCooldown = 15

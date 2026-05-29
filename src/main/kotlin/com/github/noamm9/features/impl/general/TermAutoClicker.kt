@@ -2,7 +2,6 @@ package com.github.noamm9.features.impl.general
 
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.IKeyMapping
 import com.github.noamm9.ui.clickgui.components.impl.SliderSetting
 import com.github.noamm9.utils.items.ItemUtils.skyblockId
 
@@ -21,7 +20,7 @@ object TermAutoClicker: Feature(name = "Term AC", description = "Automatically u
             if (now < nextLeftClick) return@register
 
             nextLeftClick = getNextClick(now)
-            (mc.options.keyAttack as IKeyMapping).clickCount += 1
+            mc.options.keyAttack.clickCount += 1
         }
     }
 

@@ -2,7 +2,6 @@ package com.github.noamm9.features.impl.misc
 
 import com.github.noamm9.event.impl.ContainerEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.IAbstractContainerScreen
 import com.github.noamm9.ui.clickgui.components.impl.SliderSetting
 import org.lwjgl.glfw.GLFW
 
@@ -32,9 +31,8 @@ object ScrollableTooltip: Feature("Allows you to scroll through long tooltips.")
 
     override fun init() {
         register<ContainerEvent.MouseScroll> {
-            val screen = event.screen as? IAbstractContainerScreen ?: return@register
-            if (screen.hoveredSlot == null) return@register
-            if (screen.hoveredSlot.item.isEmpty) return@register
+            val hoveredSlot = event.screen.hoveredSlot ?: return@register
+            if (hoveredSlot.item.isEmpty) return@register
 
             val scroll = (event.verticalAmount * scrollSpeed.value).toFloat()
             val holdingShift = GLFW.glfwGetKey(mc.window.handle(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS

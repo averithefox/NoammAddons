@@ -29,7 +29,7 @@
   "mixins": [
     "noammaddons.mixins.json"
   ],
-  "accessWidener": "noammaddons.accesswidener",
+  "accessWidener": "noammaddons.classTweaker",
   "depends": {
     "fabricloader": ">=0.17.3",
     "minecraft": "~1.21.10",

@@ -1,13 +1,12 @@
 package com.github.noamm9.features.impl.dev
 
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.ILanguage
-import com.github.noamm9.mixin.ILanguageManager
 import com.github.noamm9.utils.equalsOneOf
 import net.minecraft.client.multiplayer.ClientPacketListener
 import net.minecraft.client.multiplayer.ServerData
 import net.minecraft.client.resources.language.ClientLanguage
 import net.minecraft.client.resources.language.LanguageInfo
+import net.minecraft.client.resources.language.LanguageManager
 import net.minecraft.locale.Language
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentContents
@@ -24,7 +23,7 @@ import kotlin.jvm.optionals.getOrNull
 object ModHider: Feature("stops the exploit that allows servers to send a translation key inside a Sign or Anvil to gets the mods you are using. mods without language keys are safe from this", toggled = true) {
     override fun toggle() = Unit
     private val serverLanguages = IdentityHashMap<ClientPacketListener?, Language?>()
-    private val language = ILanguage.invokeLoadDefault()
+    private val language = Language.loadDefault()
 
     /*
     private val serverCheckedMods = ObjectArraySet<String>()
@@ -90,9 +89,9 @@ object ModHider: Feature("stops the exploit that allows servers to send a transl
         val currentLanguageCode = mc.languageManager.selected
 
         var languageInfo: LanguageInfo? = null
-        val languages = ILanguageManager.invokeExtractLanguages(resourceManager.listPacks())
+        val languages = LanguageManager.extractLanguages(resourceManager.listPacks())
         val list = ArrayList<String?>(2).apply { add("en_us") }
-        var bidirectional = ILanguageManager.getDefaultLanguage().bidirectional()
+        var bidirectional = LanguageManager.DEFAULT_LANGUAGE.bidirectional()
         if (currentLanguageCode != "en_us" && (languages[currentLanguageCode].also { languageInfo = it }) != null) {
             list.add(currentLanguageCode)
             bidirectional = languageInfo !!.bidirectional()

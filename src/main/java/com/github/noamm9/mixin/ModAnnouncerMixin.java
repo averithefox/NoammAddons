@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Pseudo
 @Mixin(targets = "moe.nea.firmament.features.misc.ModAnnouncer", remap = false)
-public class FuckFirmament {
+public class ModAnnouncerMixin {
     @Dynamic
     @Inject(method = "onServerJoin", at = @At("HEAD"), cancellable = true)
     private void stopFeddingEveryone(@Coerce Object event, CallbackInfo ci) {

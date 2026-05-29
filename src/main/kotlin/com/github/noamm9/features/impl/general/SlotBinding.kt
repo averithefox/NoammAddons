@@ -3,7 +3,6 @@ package com.github.noamm9.features.impl.general
 import com.github.noamm9.config.PogObject
 import com.github.noamm9.event.impl.ContainerEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.IAbstractContainerScreen
 import com.github.noamm9.ui.clickgui.components.impl.ColorSetting
 import com.github.noamm9.ui.clickgui.components.impl.KeybindSetting
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
@@ -31,7 +30,7 @@ object SlotBinding: Feature("Allows you to bind slots to hotbar slots for quick 
     override fun init() {
         register<ContainerEvent.MouseClick> {
             val screen = event.screen as? InventoryScreen ?: return@register
-            val slotId = (screen as IAbstractContainerScreen).hoveredSlot?.index ?: return@register
+            val slotId = screen.hoveredSlot?.index ?: return@register
 
             if (bindKey.isDown()) {
                 event.isCanceled = true
@@ -81,7 +80,7 @@ object SlotBinding: Feature("Allows you to bind slots to hotbar slots for quick 
     fun drawSlotBinding(context: GuiGraphics, mouseX: Int, mouseY: Int, screen: AbstractContainerScreen<*>) {
         if (! enabled) return
         if (screen !is InventoryScreen) return
-        val hoveredSlot = (screen as IAbstractContainerScreen).hoveredSlot?.index
+        val hoveredSlot = screen.hoveredSlot?.index
 
         if (showBoundSlots.value) binds.forEach { (inv, hb) ->
             if (neuStyle.value && (hoveredSlot != inv && hoveredSlot != hb)) return@forEach

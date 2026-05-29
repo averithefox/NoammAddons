@@ -4,7 +4,6 @@ import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.event.impl.PacketEvent
 import com.github.noamm9.event.impl.WorldChangeEvent
 import com.github.noamm9.features.Feature
-import com.github.noamm9.mixin.ILocalPlayer
 import com.github.noamm9.ui.clickgui.components.impl.MultiCheckboxSetting
 import com.github.noamm9.ui.clickgui.components.impl.SliderSetting
 import com.github.noamm9.utils.*
@@ -98,8 +97,8 @@ object NoRotate: Feature("Prevents the server from snapping back your head when 
                 ServerboundAcceptTeleportationPacket(packet.id).send()
                 ServerboundMovePlayerPacket.PosRot(player.x, player.y, player.z, new.yRot, new.xRot, false, false).send()
 
-                (player as ILocalPlayer).setLastYaw(new.yRot)
-                (player as ILocalPlayer).setLastPitch(new.xRot)
+                player.yRotLast = new.yRot
+                player.xRotLast = new.xRot
 
                 event.isCanceled = true
             }
@@ -125,10 +124,10 @@ object NoRotate: Feature("Prevents the server from snapping back your head when 
     }
 
     private fun doZeroPingEtherwarp(tpInfo: TeleportInfo, yaw: Float? = null, pitch: Float? = null) {
-        val player = mc.player as ILocalPlayer
+        val player = mc.player ?: return
 
-        val playerPos = pendingTeleports.lastOrNull()?.position ?: player.let { Vec3(it.serverX, it.serverY, it.serverZ) }
-        val etherPos = EtherwarpHelper.getEtherPos(playerPos, MathUtils.getLookVec(yaw ?: player.serverYaw, pitch ?: player.serverPitch), tpInfo.distance)
+        val playerPos = pendingTeleports.lastOrNull()?.position ?: player.let { Vec3(it.xLast, it.yLast, it.zLast) }
+        val etherPos = EtherwarpHelper.getEtherPos(playerPos, MathUtils.getLookVec(yaw ?: player.yRotLast, pitch ?: player.xRotLast), tpInfo.distance)
         if (! etherPos.succeeded || etherPos.pos == null) return
         if (ScanUtils.getRoomFromPos(etherPos.vec !!)?.data?.name.equalsOneOf("Teleport Maze", "Boulder")) return
 
@@ -138,10 +137,10 @@ object NoRotate: Feature("Prevents the server from snapping back your head when 
     }
 
     private fun doZeroPingInstantTransmission(tpInfo: TeleportInfo, yaw: Float? = null, pitch: Float? = null) {
-        val player = mc.player as ILocalPlayer
+        val player = mc.player ?: return
 
-        val playerPos = pendingTeleports.lastOrNull()?.position ?: Vec3(player.serverX, player.serverY, player.serverZ)
-        val pos = InstantTransmissionHelper.predictTeleport(tpInfo.distance, playerPos, yaw ?: player.serverYaw, pitch ?: player.serverPitch) ?: return
+        val playerPos = pendingTeleports.lastOrNull()?.position ?: Vec3(player.xLast, player.yLast, player.zLast)
+        val pos = InstantTransmissionHelper.predictTeleport(tpInfo.distance, playerPos, yaw ?: player.yRotLast, pitch ?: player.xRotLast) ?: return
         if (ScanUtils.getRoomFromPos(pos)?.data?.name.equalsOneOf("Teleport Maze", "Boulder")) return
         val prediction = if (WorldUtils.getBlockAt(pos.add(0.5, - 1, 0.5)) == Blocks.AIR) pos.add(y = - 1) else pos
         teleport(TeleportPrediction(prediction, tpInfo))
@@ -155,14 +154,14 @@ object NoRotate: Feature("Prevents the server from snapping back your head when 
 
     private fun getTeleportInfo(stack: ItemStack?): TeleportInfo? {
         if (stack == null || stack.isEmpty) return null
-        val player = mc.player as ILocalPlayer
+        val player = mc.player ?: return null
         val sbId = stack.skyblockId
         val nbt = stack.customData
 
         if (sbId.equalsOneOf("ASPECT_OF_THE_VOID", "ASPECT_OF_THE_END")) {
             val tuners = nbt.getByte("tuned_transmission").getOrNull()?.toDouble() ?: .0
 
-            return if (tpItems.value["Etherwarp"] !! && player.isSneakingServer && nbt.getByte("ethermerge").orElse(0) == 1.toByte()) {
+            return if (tpItems.value["Etherwarp"] !! && player.isCrouching && nbt.getByte("ethermerge").orElse(0) == 1.toByte()) {
                 TeleportInfo(57 + tuners, TeleportType.Etherwarp)
             }
             else if (tpItems.value["Instant Transmission"] !!) TeleportInfo(8 + tuners, TeleportType.InstantTransmission) else null

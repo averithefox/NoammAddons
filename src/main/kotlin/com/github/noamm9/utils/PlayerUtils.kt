@@ -4,7 +4,6 @@ import com.github.noamm9.NoammAddons.mc
 import com.github.noamm9.event.EventBus.register
 import com.github.noamm9.event.impl.ContainerFullyOpenedEvent
 import com.github.noamm9.features.impl.dungeon.LeapMenu
-import com.github.noamm9.mixin.IKeyMapping
 import com.github.noamm9.ui.utils.Animation.Companion.easeInOutCubic
 import com.github.noamm9.utils.ChatUtils.modMessage
 import com.github.noamm9.utils.ChatUtils.unformattedText
@@ -49,14 +48,14 @@ object PlayerUtils {
     fun leftClick() {
         val key = mc.options.keyAttack
         key.isDown = true
-        (key as IKeyMapping).clickCount += 1
+        key.clickCount += 1
         key.isDown = false
     }
 
     fun rightClick() {
         val key = mc.options.keyUse
         key.isDown = true
-        (key as IKeyMapping).clickCount += 1
+        key.clickCount += 1
         key.isDown = false
     }
 

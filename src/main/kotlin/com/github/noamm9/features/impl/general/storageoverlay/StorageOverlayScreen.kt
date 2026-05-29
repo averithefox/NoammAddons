@@ -7,7 +7,6 @@ import com.github.noamm9.features.impl.dev.ClickGui
 import com.github.noamm9.features.impl.general.FEAT_ItemRarity
 import com.github.noamm9.features.impl.misc.InventorySearch
 import com.github.noamm9.features.impl.misc.ScrollableTooltip
-import com.github.noamm9.mixin.IAbstractContainerScreen
 import com.github.noamm9.ui.utils.Resolution
 import com.github.noamm9.utils.ColorUtils.withAlpha
 import com.github.noamm9.utils.render.ItemRenderer
@@ -23,6 +22,7 @@ import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.inventory.Slot
 import net.minecraft.world.item.ItemStack
 import org.lwjgl.glfw.GLFW
+import sun.print.DialogOwnerAccessor.accessor
 import java.awt.Color
 import java.util.*
 
@@ -424,11 +424,10 @@ class StorageOverlayScreen: Screen(Component.literal("Storage Overlay")) {
         val screen = containerScreen ?: return
         val scale = StorageOverlay.scaleSetting.value
         init(mc, (Resolution.width / scale).toInt(), (Resolution.height / scale).toInt())
-        val accessor = screen as IAbstractContainerScreen
-        accessor.setLeftPos(0)
-        accessor.setTopPos(0)
-        accessor.setImageWidth(screen.width)
-        accessor.setImageHeight(screen.height)
+        screen.leftPos = 0
+        screen.topPos = 0
+        screen.imageWidth = screen.width
+        screen.imageHeight = screen.height
     }
 
     fun renderContainerOverlay(context: GuiGraphics, mouseX: Int, mouseY: Int) {
