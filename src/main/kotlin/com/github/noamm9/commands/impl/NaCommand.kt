@@ -39,7 +39,8 @@ object NaCommand: BaseCommand("na") {
         "/na swapmask" to "Equips either Bonzo Mask or Spirit Mask",
         "/na rodswap" to "Automatically rodswaps for you",
         "/na leap <class>" to "Automatically leaps to the selected class",
-        "/na swapto <ItemID>" to "Automatically equips the item in the EQ menu"
+        "/na swapto <ItemID>" to "Automatically equips the item in the EQ menu",
+        "/autosell" to "Manage Auto Sell item matches"
     )
 
     override fun CommandNodeBuilder.build() {
