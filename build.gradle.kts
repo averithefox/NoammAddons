@@ -1,8 +1,9 @@
 plugins {
     `maven-publish`
     kotlin("jvm") version "2.3.21"
-    kotlin("plugin.serialization") version "2.3.21"
     id("net.fabricmc.fabric-loom-remap")
+    id("com.gradleup.shadow") version "9.4.1"
+    kotlin("plugin.serialization") version "2.3.21"
 }
 
 val minecraft_version: String by project
@@ -25,7 +26,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val bundled by configurations.creating {
+val shadowImplementation by configurations.creating {
     configurations.implementation {
         extendsFrom(this@creating)
     }
@@ -43,12 +44,12 @@ dependencies {
     modCompileOnly("maven.modrinth:iris:$iris_version")
     modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
 
-    bundled("io.github.classgraph:classgraph:4.8.174")
-    bundled("io.ktor:ktor-client-cio:$ktor_version")
-    bundled("io.ktor:ktor-client-websockets-jvm:$ktor_version")
-    bundled("io.ktor:ktor-client-content-negotiation-jvm:$ktor_version")
-    bundled("io.ktor:ktor-client-encoding:$ktor_version")
-    bundled("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    shadowImplementation("io.github.classgraph:classgraph:4.8.174")
+    shadowImplementation("io.ktor:ktor-client-cio:$ktor_version")
+    shadowImplementation("io.ktor:ktor-client-websockets-jvm:$ktor_version")
+    shadowImplementation("io.ktor:ktor-client-content-negotiation-jvm:$ktor_version")
+    shadowImplementation("io.ktor:ktor-client-encoding:$ktor_version")
+    shadowImplementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
     modImplementation("com.github.Noamm9:DataFixer:7148621a34")
     include("com.github.Noamm9:DataFixer:7148621a34")
@@ -73,12 +74,6 @@ afterEvaluate {
     loom.runs.named("client") {
         vmArg("-javaagent:${configurations.compileClasspath.get().find { it.name.contains("sponge-mixin") }}")
     }
-
-    bundled.resolvedConfiguration.resolvedArtifacts.forEach { artifact ->
-        artifact.moduleVersion.id.let { id ->
-            dependencies.add("include", "${id.group}:${id.name}:${id.version}")
-        }
-    }
 }
 
 tasks {
@@ -93,8 +88,24 @@ tasks {
     }
 
     jar {
-        archiveClassifier = "dev"
+        archiveClassifier = "dev-nodeps"
         destinationDirectory = layout.buildDirectory.dir("badjars")
+    }
+
+    shadowJar {
+        archiveClassifier = "dev-shadow"
+        destinationDirectory = layout.buildDirectory.dir("badjars")
+
+        configurations = listOf(shadowImplementation)
+
+        minimize()
+
+        exclude("META-INF/maven/")
+    }
+
+    remapJar {
+        archiveClassifier = null
+        inputFile = shadowJar.get().archiveFile
     }
 
     test {
