@@ -98,7 +98,11 @@ tasks {
 
         configurations = listOf(shadowImplementation)
 
-        minimize()
+        mergeServiceFiles()
+
+        minimize {
+            exclude(dependency("io.ktor:.*:.*"))
+        }
 
         exclude("META-INF/maven/")
     }
