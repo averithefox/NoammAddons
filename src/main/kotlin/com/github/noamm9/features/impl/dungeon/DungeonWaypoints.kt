@@ -15,6 +15,7 @@ import com.github.noamm9.utils.Utils
 import com.github.noamm9.utils.WorldUtils
 import com.github.noamm9.utils.dungeons.enums.SecretType
 import com.github.noamm9.utils.dungeons.map.core.RoomState
+import com.github.noamm9.utils.dungeons.map.core.UniqueRoom
 import com.github.noamm9.utils.dungeons.map.utils.ScanUtils
 import com.github.noamm9.utils.equalsOneOf
 import com.github.noamm9.utils.location.LocationUtils
@@ -52,12 +53,12 @@ object DungeonWaypoints: Feature("Add a custom waypoint with /ndw add while look
     val waypoints by PogObject("dungeonWaypoints", mutableMapOf<String, MutableList<DungeonWaypoint>>())
     private val secretPositions by lazy { ScanUtils.roomList.associate { it.name to it.secretCoords } }
     val currentRoomWaypoints = CopyOnWriteArrayList<DungeonWaypoint>()
-    private val currentSecrets = CopyOnWriteArrayList<SecretWaypoint>()
+    private val roomSecretProgress = ConcurrentHashMap<UniqueRoom, CopyOnWriteArrayList<SecretWaypoint>>()
+    private var currentSecrets = CopyOnWriteArrayList<SecretWaypoint>()
 
     override fun init() {
         register<DungeonEvent.RoomEvent.onEnter> {
             currentRoomWaypoints.clear()
-            currentSecrets.clear()
 
             val roomName = event.room.name
             val roomRotation = 360 - (event.room.rotation ?: return@register)
@@ -69,21 +70,9 @@ object DungeonWaypoints: Feature("Add a custom waypoint with /ndw add while look
 
             if (! secretWaypoints.value) return@register
             if (event.room.mainRoom.state == RoomState.GREEN) return@register
-            val coords = secretPositions[roomName] ?: return@register
-
-            val activeSecrets = buildList {
-                fun addSecrets(list: List<BlockPos>, type: SecretType) {
-                    list.forEach { add(SecretWaypoint(ScanUtils.getRealCoord(it, roomCorner, roomRotation), type)) }
-                }
-
-                addSecrets(coords.redstoneKey, SecretType.REDSTONE_KEY)
-                addSecrets(coords.wither, SecretType.WITHER_ESSANCE)
-                addSecrets(coords.bat, SecretType.BAT)
-                addSecrets(coords.item, SecretType.ITEM)
-                addSecrets(coords.chest, SecretType.CHEST)
+            currentSecrets = roomSecretProgress.computeIfAbsent(event.room) {
+                CopyOnWriteArrayList(buildSecrets(roomName, roomCorner, roomRotation))
             }
-
-            currentSecrets.addAll(activeSecrets)
         }
 
         register<DungeonEvent.SecretEvent> {
@@ -99,7 +88,7 @@ object DungeonWaypoints: Feature("Add a custom waypoint with /ndw add while look
                     else -> Int.MAX_VALUE
                 }
 
-                currentSecrets.asSequence()
+                currentSecrets
                     .filter { it.type == event.type }
                     .map { it to it.pos.distSqr(event.pos) }
                     .minByOrNull { it.second }
@@ -141,9 +130,33 @@ object DungeonWaypoints: Feature("Add a custom waypoint with /ndw add while look
             }
         }
 
+        register<DungeonEvent.RunEndedEvent> { resetSecretProgress() }
+
         register<WorldChangeEvent> {
-            currentSecrets.clear()
+            resetSecretProgress()
             currentRoomWaypoints.clear()
+        }
+    }
+
+    private fun resetSecretProgress() {
+        roomSecretProgress.clear()
+        currentSecrets.clear()
+        currentSecrets = CopyOnWriteArrayList()
+    }
+
+    private fun buildSecrets(roomName: String, roomCorner: BlockPos, roomRotation: Int): List<SecretWaypoint> {
+        val coords = secretPositions[roomName] ?: return emptyList()
+
+        return buildList {
+            fun addSecrets(list: List<BlockPos>, type: SecretType) {
+                list.forEach { add(SecretWaypoint(ScanUtils.getRealCoord(it, roomCorner, roomRotation), type)) }
+            }
+
+            addSecrets(coords.redstoneKey, SecretType.REDSTONE_KEY)
+            addSecrets(coords.wither, SecretType.WITHER_ESSANCE)
+            addSecrets(coords.bat, SecretType.BAT)
+            addSecrets(coords.item, SecretType.ITEM)
+            addSecrets(coords.chest, SecretType.CHEST)
         }
     }
 
