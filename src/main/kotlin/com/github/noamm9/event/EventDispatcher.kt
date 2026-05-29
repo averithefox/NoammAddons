@@ -66,58 +66,60 @@ object EventDispatcher {
 
 
         register<PacketEvent.Received> {
-            if (event.packet is ClientboundSystemChatPacket) {
-                if (event.packet.overlay) return@register
-                if (EventBus.post(ChatMessageEvent(event.packet.content))) {
-                    event.isCanceled = true
+            when (event.packet) {
+                is ClientboundSystemChatPacket -> {
+                    if (event.packet.overlay) return@register
+                    if (EventBus.post(ChatMessageEvent(event.packet.content))) {
+                        event.isCanceled = true
+                    }
                 }
-            }
-            else if (event.packet is ClientboundSoundPacket) {
-                if (! LocationUtils.inDungeon || LocationUtils.inBoss) return@register
-                if (event.packet.sound.value() != SoundEvents.BAT_DEATH) return@register
+                is ClientboundSoundPacket -> {
+                    if (! LocationUtils.inDungeon || LocationUtils.inBoss) return@register
+                    if (event.packet.sound.value() != SoundEvents.BAT_DEATH) return@register
 
-                EventBus.post(DungeonEvent.SecretEvent(
-                    SecretType.BAT,
-                    BlockPos(event.packet.x.toInt(), event.packet.y.toInt(), event.packet.z.toInt())
-                ))
-            }
-            else if (event.packet is ClientboundTakeItemEntityPacket) {
-                if (! LocationUtils.inDungeon || LocationUtils.inBoss) return@register
-                val entity = mc.level?.getEntity(event.packet.itemId) as? ItemEntity ?: return@register
-                if (entity.item.hoverName.unformattedText !in DungeonUtils.dungeonItemDrops) return@register
-                if (mc.player !!.distanceTo(entity) > 6) return@register
+                    EventBus.post(DungeonEvent.SecretEvent(
+                        SecretType.BAT,
+                        BlockPos(event.packet.x.toInt(), event.packet.y.toInt(), event.packet.z.toInt())
+                    ))
+                }
+                is ClientboundTakeItemEntityPacket -> {
+                    if (! LocationUtils.inDungeon || LocationUtils.inBoss) return@register
+                    val entity = mc.level?.getEntity(event.packet.itemId) as? ItemEntity ?: return@register
+                    if (entity.item.hoverName.unformattedText !in DungeonUtils.dungeonItemDrops) return@register
+                    if (mc.player !!.distanceTo(entity) > 6) return@register
 
-                EventBus.post(DungeonEvent.SecretEvent(SecretType.ITEM, entity.blockPosition()))
-            }
-            else if (event.packet is ClientboundContainerClosePacket) {
-                if (event.packet.containerId == invWindowId) resetInventoryState()
-            }
-            else if (event.packet is ClientboundOpenScreenPacket) {
-                resetInventoryState()
-                invAccept = true
-                invWindowId = event.packet.containerId
-                invTitle = event.packet.title
-                invSlotCount = getSlotCount(event.packet.type)
-            }
-            else if (event.packet is ClientboundContainerSetContentPacket) {
-                if (event.packet.containerId == invWindowId) {
-                    event.packet.items.forEachIndexed { index, stack ->
-                        if (index < invSlotCount && ! stack.isEmpty) {
-                            invItems[index] = stack
+                    EventBus.post(DungeonEvent.SecretEvent(SecretType.ITEM, entity.blockPosition()))
+                }
+                is ClientboundContainerClosePacket -> {
+                    if (event.packet.containerId == invWindowId) resetInventoryState()
+                }
+                is ClientboundOpenScreenPacket -> {
+                    resetInventoryState()
+                    invAccept = true
+                    invWindowId = event.packet.containerId
+                    invTitle = event.packet.title
+                    invSlotCount = getSlotCount(event.packet.type)
+                }
+                is ClientboundContainerSetContentPacket -> {
+                    if (event.packet.containerId == invWindowId) {
+                        event.packet.items.forEachIndexed { index, stack ->
+                            if (index < invSlotCount && ! stack.isEmpty) {
+                                invItems[index] = stack
+                            }
                         }
+                        finishInventoryLoading()
                     }
-                    finishInventoryLoading()
                 }
-            }
-            else if (event.packet is ClientboundContainerSetSlotPacket) {
-                if (invAccept && event.packet.containerId == invWindowId) {
-                    val slot = event.packet.slot
-                    if (slot < invSlotCount) {
-                        if (! event.packet.item.isEmpty) invItems[slot] = event.packet.item
-                    }
-                    else finishInventoryLoading()
+                is ClientboundContainerSetSlotPacket -> {
+                    if (invAccept && event.packet.containerId == invWindowId) {
+                        val slot = event.packet.slot
+                        if (slot < invSlotCount) {
+                            if (! event.packet.item.isEmpty) invItems[slot] = event.packet.item
+                        }
+                        else finishInventoryLoading()
 
-                    if (invItems.size >= invSlotCount) finishInventoryLoading()
+                        if (invItems.size >= invSlotCount) finishInventoryLoading()
+                    }
                 }
             }
         }
