@@ -13,10 +13,8 @@ import org.lwjgl.glfw.GLFW
 object LCEtherwarp: Feature(name = "LC Etherwarp", description = "Allows you to use the etherwarp ability with left-click") {
     private val swingHandToggle by ToggleSetting("Swing Hand", true)
 
-    //#if CHEAT
     private val autoSneak by ToggleSetting("Auto Sneak", false)
     private val autoSneakDelay by SliderSetting("Auto Sneak Delay", 50, 50, 150, 1).showIf { autoSneak.value }
-    //#endif
 
     override fun init() {
         register<MouseClickEvent> {
@@ -24,16 +22,11 @@ object LCEtherwarp: Feature(name = "LC Etherwarp", description = "Allows you to 
             if (event.action != GLFW.GLFW_PRESS) return@register
             if (mc.screen != null) return@register
             val player = mc.player ?: return@register
-            //#if CHEAT
             if (! player.isCrouching && ! autoSneak.value) return@register
-            //#else
-            //$if (! player.isCrouching) return@register
-            //#endif
             if (EtherwarpHelper.getEtherwarpDistance(player.mainHandItem) == null) return@register
 
             event.isCanceled = true
 
-            //#if CHEAT
             if (! player.isCrouching && autoSneak.value) scope.launch {
                 val wait = autoSneakDelay.value.toLong() / 2
                 PlayerUtils.toggleSneak(true)
@@ -49,10 +42,6 @@ object LCEtherwarp: Feature(name = "LC Etherwarp", description = "Allows you to 
                 PlayerUtils.rightClick()
                 if (swingHandToggle.value) PlayerUtils.swingArm()
             }
-            //#else
-            //$PlayerUtils.rightClick()
-            //$if (swingHandToggle.value) PlayerUtils.swingArm()
-            //#endif
         }
     }
 }

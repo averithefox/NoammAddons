@@ -1,13 +1,13 @@
-rootProject.name = "NoammAddons"
-
 pluginManagement {
     repositories {
+        maven("https://maven.fabricmc.net/")
         gradlePluginPortal()
         mavenCentral()
-        maven("https://maven.fabricmc.net/")
     }
 
     plugins {
-        id("net.fabricmc.fabric-loom-remap") version providers.gradleProperty("loom_version").get()
+        id("net.fabricmc.fabric-loom-remap") version providers.gradleProperty("loom_version")
     }
 }
+
+rootProject.name = "NoammAddons"

@@ -10,18 +10,10 @@ import com.github.noamm9.ui.clickgui.components.impl.SliderSetting
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
 import java.awt.Color
 
-//#if LEGIT
-//$import com.github.noamm9.ui.clickgui.components.Setting.Companion.hideIf
-//#endif
-
 object MapConfig {
     val mapEnabled = ToggleSetting("Map Enabled", true).section("Map")
 
-    //#if CHEAT
     val dungeonMapCheater = ToggleSetting("Cheater Map", false)
-    //#else
-    //$val dungeonMapCheater = ToggleSetting("Legit", false).hideIf { true }
-    //#endif
 
     val mapExtraInfo = ToggleSetting("Show Extra Info Under Map", false)
     val mapHideInBoss = ToggleSetting("Hide In Boss", false)
@@ -44,11 +36,7 @@ object MapConfig {
     val hideQuestionCheckmarks = ToggleSetting("Hide Unknown Room Checkmark", false).showIf { dungeonMapCheckmarkStyle.value == 0 }
     val limitRoomNameSize = ToggleSetting("Limit Room Name Size", true).showIf { dungeonMapCheckmarkStyle.value == 2 || dungeonMapCheckmarkStyle.value == 3 }
 
-    //#if CHEAT
     val highlightMimicRoom = ToggleSetting("Highlight Mimic Room", true)
-    //#else
-    //$val highlightMimicRoom = ToggleSetting("Highlight Mimic Room Legit", false).hideIf { true }
-    //#endif
 
     val mapPlayerHeadColor = ColorSetting("Head Border", Color(0, 0, 0), true).section("Colors")
     val mapPlayerHeadColorClassBased = ToggleSetting("Head Border Class Base", false)

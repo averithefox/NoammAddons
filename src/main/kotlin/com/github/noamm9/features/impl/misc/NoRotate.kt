@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.misc
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.event.impl.PacketEvent
 import com.github.noamm9.event.impl.WorldChangeEvent
@@ -183,4 +181,3 @@ object NoRotate: Feature("Prevents the server from snapping back your head when 
     data class TeleportInfo(val distance: Double, val type: TeleportType)
     data class TeleportPrediction(val position: Vec3, val info: TeleportInfo)
 }
-//#endif

@@ -1,7 +1,5 @@
 package com.github.noamm9.mixin;
 
-//#if CHEAT
-
 import com.github.noamm9.features.impl.dungeon.SecretHitboxes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -24,4 +22,3 @@ public class MixinLeverBlock {
         }
     }
 }
-//#endif

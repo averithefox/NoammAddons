@@ -28,9 +28,7 @@ import java.util.concurrent.*
 object Secrets: Feature() {
     private val hudDisplay by ToggleSetting("Secret HUD", true).withDescription("Displays the current room's secrets on screen.").section("HUD")
 
-    //#if CHEAT
     private val closeChest by ToggleSetting("Close Chest").section("Auto").withDescription("Automatically closes the secret chest for you.")
-    //#endif
 
     private val secretClicked by ToggleSetting("Highlight Clicked Secret").withDescription("Highlights the block of a secret when you interact with it.").section("Secret Clicked")
     private val displayTime by SliderSetting("Highlight Time", 2.0, 0.5, 5.0, 0.1).withDescription("How long (in seconds) the highlight box remains visible.").showIf { secretClicked.value }
@@ -65,7 +63,6 @@ object Secrets: Feature() {
             return@hudElement line.width().toFloat() to 9f
         }
 
-        //#if CHEAT
         register<MainThreadPacketReceivedEvent.Pre> {
             if (! closeChest.value) return@register
             if (! LocationUtils.inDungeon) return@register
@@ -75,7 +72,6 @@ object Secrets: Feature() {
             ServerboundContainerClosePacket(packet.containerId).send()
             event.isCanceled = true
         }
-        //#endif
 
         register<RenderWorldEvent> {
             if (clicked.isEmpty()) return@register

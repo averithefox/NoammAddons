@@ -1,7 +1,5 @@
 package com.github.noamm9.mixin;
 
-//#if CHEAT
-
 import com.github.noamm9.features.impl.dungeon.SecretHitboxes;
 import com.github.noamm9.utils.dungeons.DungeonUtils;
 import net.minecraft.core.BlockPos;
@@ -42,4 +40,3 @@ abstract class MixinSkullBlock extends AbstractSkullBlock {
         return this.getType() == SkullBlock.Types.PIGLIN ? SHAPE_PIGLIN : SHAPE;
     }
 }
-//#endif

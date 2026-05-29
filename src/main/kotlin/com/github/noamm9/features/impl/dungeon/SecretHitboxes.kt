@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.dungeon
 
-//#if CHEAT
-
 import com.github.noamm9.features.Feature
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
 import com.github.noamm9.utils.location.LocationUtils
@@ -63,4 +61,3 @@ object SecretHitboxes: Feature("Changes the hitboxes of secret blocks to be larg
         return true
     }
 }
-//#endif

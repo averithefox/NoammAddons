@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.dungeon
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.MainThreadPacketReceivedEvent
 import com.github.noamm9.features.Feature
 import com.github.noamm9.ui.clickgui.components.impl.ToggleSetting
@@ -37,4 +35,3 @@ object HiddenMobs: Feature("Reveals invisible mobs in dungeons.") {
         }
     }
 }
-//#endif

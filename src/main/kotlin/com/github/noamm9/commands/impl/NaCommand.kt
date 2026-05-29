@@ -36,12 +36,10 @@ object NaCommand: BaseCommand("na") {
         "/na ping" to "Shows your ping in chat",
         "/na tps" to "Shows the server's tps in chat",
         "/na rtca" to "Shows the runs needed for each class to hit class average 50",
-        //#if CHEAT
         "/na swapmask" to "Equips either Bonzo Mask or Spirit Mask",
         "/na rodswap" to "Automatically rodswaps for you",
         "/na leap <class>" to "Automatically leaps to the selected class",
         "/na swapto <ItemID>" to "Automatically equips the item in the EQ menu"
-        //#endif
     )
 
     override fun CommandNodeBuilder.build() {
@@ -144,7 +142,6 @@ object NaCommand: BaseCommand("na") {
             }
         }
 
-        //#if CHEAT
         literal("swapmask") {
             runs {
                 scope.launch {
@@ -185,7 +182,6 @@ object NaCommand: BaseCommand("na") {
                 }
             }
         }
-        //#endif
     }
 
     private val partyMembersSuggestion = { PartyUtils.members.map { it.lowercase() } }

@@ -54,16 +54,12 @@ object EtherwarpHelper {
     }
 
     private fun getZeroPingCameraPos(fallback: Vec3): Vec3 {
-        //#if CHEAT
         val noRotate = com.github.noamm9.features.impl.misc.NoRotate
         if (! noRotate.enabled) return fallback
         val pendingTeleport = noRotate.pendingTeleports.lastOrNull() ?: return fallback
         val config = noRotate.zeroPingCamera.value.values.toList()
         if (! config[pendingTeleport.info.type.ordinal]) return fallback
         return pendingTeleport.position
-        //#else
-        //$return fallback
-        //#endif
     }
 
     private fun traverseVoxels(start: Vec3, end: Vec3): EtherPos {

@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.dungeon
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.ChatMessageEvent
 import com.github.noamm9.event.impl.WorldChangeEvent
 import com.github.noamm9.features.Feature
@@ -91,4 +89,3 @@ object AutoGFS: Feature("Automatically refills dungeon items from your sacks usi
         }
     }
 }
-//#endif

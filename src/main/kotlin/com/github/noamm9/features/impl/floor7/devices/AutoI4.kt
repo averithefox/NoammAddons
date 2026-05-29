@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.floor7.devices
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.BlockChangeEvent
 import com.github.noamm9.event.impl.ChatMessageEvent
 import com.github.noamm9.event.impl.TickEvent
@@ -212,4 +210,3 @@ object AutoI4: Feature("Fully Automated I4") {
         val hasAlerted: Boolean = false
     )
 }
-//#endif

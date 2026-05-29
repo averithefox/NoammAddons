@@ -1,8 +1,6 @@
 package com.github.noamm9.features.impl.general
 /*
 
-//#if CHEAT
-
 import com.github.noamm9.NoammAddons
 import com.github.noamm9.NoammAddons.MOD_NAME
 import com.github.noamm9.event.EventPriority
@@ -193,6 +191,4 @@ object AutoHotbar: Feature("Automatically swaps items to specific hotbar slots u
         var disabled: MutableSet<String>
     )
 }
-//#endif
-
  */

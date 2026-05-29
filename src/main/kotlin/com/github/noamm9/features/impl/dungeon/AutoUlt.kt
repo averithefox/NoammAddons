@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.dungeon
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.ChatMessageEvent
 import com.github.noamm9.features.Feature
 import com.github.noamm9.utils.ChatUtils
@@ -50,4 +48,3 @@ object AutoUlt: Feature("Automatically uses your dungeon class ultimate when nee
         }
     }
 }
-//#endif

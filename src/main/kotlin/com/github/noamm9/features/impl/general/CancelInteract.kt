@@ -2,8 +2,6 @@ package com.github.noamm9.features.impl.general
 
 /* R.I.P was good when it lasted
 
-//#if CHEAT
-
 import com.github.noamm9.event.EventPriority
 import com.github.noamm9.event.impl.PlayerInteractEvent
 import com.github.noamm9.features.Feature
@@ -16,5 +14,4 @@ object CancelInteract: Feature("Disables Hypixel's stupid Ender Pearl throw bloc
         }
     }
 }
-//#endif
  */

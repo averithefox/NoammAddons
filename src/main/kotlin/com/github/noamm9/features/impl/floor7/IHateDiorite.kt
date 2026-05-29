@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.floor7
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
 import com.github.noamm9.utils.DataDownloader
@@ -41,4 +39,3 @@ object IHateDiorite: Feature("I Hate Diorite") {
         }
     }
 }
-//#endif

@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.floor7.terminals
 
-//#if CHEAT
-
 import com.github.noamm9.NoammAddons
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
@@ -179,4 +177,3 @@ object AutoTerminal: Feature("Automatically clicks terminals for you.") {
         lastClickedSlot = null
     }
 }
-//#endif

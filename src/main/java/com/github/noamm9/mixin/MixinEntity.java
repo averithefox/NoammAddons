@@ -13,10 +13,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//#if LEGIT
-//$import static com.github.noamm9.NoammAddons.mc;
-//#endif
-
 @Mixin(Entity.class)
 public abstract class MixinEntity {
     @Unique private int customGlowColor = 0xFFFFFF;
@@ -28,12 +24,6 @@ public abstract class MixinEntity {
     @Inject(method = "isCurrentlyGlowing", at = @At("HEAD"), cancellable = true)
     private void onIsCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
         var entity = (Entity) (Object) this;
-        //#if LEGIT
-        //$var player = mc.player;
-        //$if (player == null) return;
-        //$if (!player.hasLineOfSight(entity)) return;
-        //$if (entity.isInvisibleTo(player)) return;
-        //#endif
 
         var event = new CheckEntityGlowEvent(entity);
         EventBus.post(event);

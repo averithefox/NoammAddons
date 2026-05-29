@@ -14,17 +14,14 @@ jobs:
         with:
           java-version: '21'
           distribution: 'microsoft'
-      - name: make gradle wrapper executable
-        run: chmod +x ./gradlew
-      - name: build legit + cheat
+      - name: build
         run: ./gradlew build
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: NoammAddons-jars
           path: |
-            build/libs/*-legit.jar
-            build/libs/*-cheat.jar
+            build/libs/*.jar
       - name: generate nightly download link
         run: |
           echo "### Nightly Download Link" >> $GITHUB_STEP_SUMMARY

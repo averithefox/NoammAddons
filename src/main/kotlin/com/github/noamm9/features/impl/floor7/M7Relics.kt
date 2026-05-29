@@ -31,14 +31,12 @@ object M7Relics: Feature(name = "M7 Relics", description = "A bunch of M7 Relics
     private val relicSpawnTimer by ToggleSetting("Spawn Timer").withDescription("Shows on screen when the relic will spawn.")
     private val relicTimer by ToggleSetting("Place Timer").withDescription("Sends in chat the time it took to place the relic after you picked it up.")
 
-    //#if CHEAT
     private val relicLook by ToggleSetting("Relic Look").withDescription("Automatically rotate to the relic cauldron after you pick it up.")
     private val relicLookTime by SliderSetting("Relic Look Time", 150L, 10, 300, 1).showIf { relicLook.value }.withDescription("How fast should the auto rotate (in milliseconds)")
     private val blockWrongRelic by ToggleSetting("Block Wrong Relic").withDescription("Prevents you from placing your relic at the wrong cauldron.")
 
     private val relicAura by ToggleSetting("Relic Aura").withDescription("Automatically pick up the relic when it spawns.")
     private var lastClick = System.currentTimeMillis()
-    //#endif
 
     private val relicPickUpRegex = Regex("^(\\w{3,16}) picked the Corrupted (\\w{3,6}) Relic!$")
     private val relicTimes = mutableListOf<RelicEntry>()
@@ -81,7 +79,6 @@ object M7Relics: Feature(name = "M7 Relics", description = "A bunch of M7 Relics
             }
         }
 
-        //#if CHEAT
         fun onInteract(event: PlayerInteractEvent, pos: BlockPos) {
             if (! blockWrongRelic.value || LocationUtils.F7Phase != 5) return
             val item = event.item?.hoverName?.string ?: return
@@ -102,7 +99,6 @@ object M7Relics: Feature(name = "M7 Relics", description = "A bunch of M7 Relics
                 PlayerUtils.rotateSmoothly(relic.cauldronPos.center(), relicLookTime.value)
             }
         }
-        //#endif
 
         hudElement("Relic Spawn Timer", { relicSpawnTimer.value }, { (spawnTimerTicks - DungeonListener.currentTime) > 0 }, centered = true) { ctx, example ->
             val timeLeft = if (example) 25 else spawnTimerTicks - DungeonListener.currentTime
@@ -153,7 +149,6 @@ object M7Relics: Feature(name = "M7 Relics", description = "A bunch of M7 Relics
             }
         }
 
-        //#if CHEAT
         register<TickEvent.Start> {
             if (! relicAura.value) return@register
             if (LocationUtils.F7Phase != 5) return@register
@@ -171,7 +166,6 @@ object M7Relics: Feature(name = "M7 Relics", description = "A bunch of M7 Relics
             PlayerUtils.swingArm()
             lastClick = System.currentTimeMillis()
         }
-        //#endif
     }
 
     private fun isEntityAtCauldron(pos: Vec3, relic: WitherRelic): Boolean {

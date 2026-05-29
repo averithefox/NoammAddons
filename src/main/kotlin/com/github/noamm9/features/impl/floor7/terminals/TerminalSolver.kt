@@ -73,9 +73,7 @@ object TerminalSolver: Feature("Renders solutions for Floor 7 terminals.") {
 
     override fun onDisable() {
         super.onDisable()
-        //#if CHEAT
         if (AutoTerminal.enabled) return
-        //#endif
         TerminalListener.packetReceivedListener.unregister()
         TerminalListener.packetSentListener.unregister()
         TerminalListener.tickListener.unregister()
@@ -190,9 +188,7 @@ object TerminalSolver: Feature("Renders solutions for Floor 7 terminals.") {
         register<ContainerEvent.MouseClick> {
             if (! TerminalListener.inTerm) return@register
             val termType = TerminalListener.currentType ?: return@register
-            //#if CHEAT
             if (AutoTerminal.enabled && AutoTerminal.shouldAutoSolve(termType)) return@register
-            //#endif
             event.isCanceled = true
             if (TerminalListener.checkFcDelay()) return@register
 
@@ -291,9 +287,7 @@ object TerminalSolver: Feature("Renders solutions for Floor 7 terminals.") {
             queue.clear()
             solve()
 
-            //#if CHEAT
             if (AutoTerminal.enabled) AutoTerminal.onItemsUpdated()
-            //#endif
         }
     }
 
@@ -396,9 +390,7 @@ object TerminalSolver: Feature("Renders solutions for Floor 7 terminals.") {
                     if (correct != null) TerminalType.melodyCorrect = correct
                     TerminalType.melodyButton = button.toInt()
                     TerminalType.melodyCurrent = current
-                    //#if CHEAT
                     AutoTerminal.reset()
-                    //#endif
                 }
             }
         }

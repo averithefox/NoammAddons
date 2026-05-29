@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.misc
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.PacketEvent
 import com.github.noamm9.event.impl.RenderWorldEvent
 import com.github.noamm9.event.impl.TickEvent
@@ -126,4 +124,3 @@ object PvpBlink: Feature("Desyncs your connection to eat knockback or spoof posi
         sentQueue.clear()
     }
 }
-//#endif

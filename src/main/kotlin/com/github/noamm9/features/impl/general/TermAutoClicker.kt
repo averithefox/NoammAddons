@@ -1,7 +1,5 @@
 package com.github.noamm9.features.impl.general
 
-//#if CHEAT
-
 import com.github.noamm9.event.impl.TickEvent
 import com.github.noamm9.features.Feature
 import com.github.noamm9.mixin.IKeyMapping
@@ -33,4 +31,3 @@ object TermAutoClicker: Feature(name = "Term AC", description = "Automatically u
         return now + delay + randomOffset
     }
 }
-//#endif
