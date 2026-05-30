@@ -32,6 +32,12 @@ val shadowImplementation by configurations.creating {
     }
 }
 
+val shadowModImplementation by configurations.creating {
+    configurations.modImplementation {
+        extendsFrom(this@creating)
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     mappings(loom.officialMojangMappings())
@@ -51,8 +57,7 @@ dependencies {
     shadowImplementation("io.ktor:ktor-client-encoding:$ktor_version")
     shadowImplementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
-    modImplementation("com.github.Noamm9:DataFixer:7148621a34")
-    include("com.github.Noamm9:DataFixer:7148621a34")
+    shadowModImplementation("com.github.Noamm9:DataFixer:7148621a34")
 
     testImplementation(kotlin("test"))
 }
@@ -96,7 +101,7 @@ tasks {
         archiveClassifier = "dev-shadow"
         destinationDirectory = layout.buildDirectory.dir("badjars")
 
-        configurations = listOf(shadowImplementation)
+        configurations = listOf(shadowImplementation, shadowModImplementation)
 
         mergeServiceFiles()
 
